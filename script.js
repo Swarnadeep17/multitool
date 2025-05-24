@@ -7,8 +7,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Load tools from tools.json
     fetch('/tools.json')
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch tools.json: ${response.statusText}`);
+            }
+            return response.json();
+        })
         .then(tools => {
+            console.log('Tools loaded:', tools); // Debug log
             // Display tool categories
             tools.forEach(tool => {
                 const card = document.createElement('div');
@@ -34,7 +40,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 toolCategories.appendChild(card);
             });
         })
-        .catch(error => console.error('Error loading tools:', error));
+        .catch(error => {
+            console.error('Error loading tools:', error);
+            toolCategories.innerHTML = '<p>Error loading tools. Please try again later.</p>';
+        });
 
     // Back to tools button
     backButton.addEventListener('click', () => {
