@@ -1,55 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FileBae - PDF to Image Converter</title>
-    <link rel="stylesheet" href="/styles.css">
-</head>
-<body>
-    <header>
-        <h1>FileBae</h1>
-        <a href="/index.html">Back to Home</a>
-    </header>
-    <main>
-        <section id="tool-container">
-            <h2>PDF to Image Converter</h2>
-            <form id="pdf-to-image-form">
-                <input type="file" id="pdf-input" accept=".pdf" required>
-                <label>Image Format:
-                    <select id="image-format">
-                        <option value="png">PNG</option>
-                        <option value="jpeg">JPEG</option>
-                    </select>
-                </label>
-                <label>DPI: <input type="number" id="dpi" value="150" min="72" max="300"></label>
-                <label>Pages: <input type="text" id="pages" placeholder="e.g., 1,3-5"></label>
-                <button type="submit">Convert</button>
-            </form>
-            <a id="download-link" style="display:none">Download Images</a>
-        </section>
-    </main>
-    <script>
-        document.getElementById('pdf-to-image-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const formData = new FormData();
-            formData.append('pdf', document.getElementById('pdf-input').files[0]);
-            formData.append('format', document.getElementById('image-format').value);
-            formData.append('dpi', document.getElementById('dpi').value);
-            formData.append('pages', document.getElementById('pages').value);
+<script>
+    document.getElementById('pdf-to-image-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const pdfFile = document.getElementById('pdf-input').files[0];
+        if (!pdfFile) {
+            alert('Please select a PDF file');
+            return;
+        }
+        const formData = new FormData();
+        formData.append('pdf', pdfFile);
+        formData.append('format', document.getElementById('image-format').value);
+        formData.append('dpi', document.getElementById('dpi').value);
+        formData.append('pages', document.getElementById('pages').value);
 
-            try {
-                const response = await fetch('https://filebae.onrender.com/tools/pdf/pdf-to-image', {
-                    method: 'POST',
-                    body: formData
-                });
-                const result = await response.json();
-                alert('Conversion result: ' + JSON.stringify(result));
-                // In a real implementation, you'd update the download link with the converted images
-            } catch (error) {
-                alert('Error: ' + error.message);
-            }
-        });
-    </script>
-</body>
-</html>
+        try {
+            const response = await fetch('https://filebae-backend.onrender.com/api/pdf-to-image', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            alert('Conversion result: ' + JSON.stringify(result));
+        } catch (error) {
+            alert('Error: ' + error.message);
+        }
+    });
+</script>
