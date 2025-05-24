@@ -14,15 +14,17 @@ document.addEventListener('DOMContentLoaded', () => {
             return response.json();
         })
         .then(tools => {
-            console.log('Tools loaded:', tools); // Debug log
-            // Display tool categories
+            console.log('Tools loaded:', tools);
+            if (tools.length === 0) {
+                toolCategories.innerHTML = '<p>No tools available at the moment.</p>';
+                return;
+            }
             tools.forEach(tool => {
                 const card = document.createElement('div');
                 card.className = 'tool-card';
                 card.textContent = tool.name;
                 card.dataset.toolId = tool.id;
                 card.addEventListener('click', () => {
-                    // Show functions for selected tool
                     toolCategories.style.display = 'none';
                     functionList.style.display = 'block';
                     selectedTool.textContent = `${tool.name} Tools`;
@@ -42,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => {
             console.error('Error loading tools:', error);
-            toolCategories.innerHTML = '<p>Error loading tools. Please try again later.</p>';
+            toolCategories.innerHTML = '<p style="color: red;">Error loading tools: ' + error.message + '</p>';
         });
 
     // Back to tools button
