@@ -7,11 +7,13 @@ const path = require('path');
 const cors = require('cors');
 
 const app = express();
-app.use(cors({ origin: 'https://filebae.onrender.com' })); // Allow requests from your front-end domain
+app.use(cors({ origin: 'https://filebae.onrender.com' }));
 app.use(fileUpload());
 app.use(express.static('public'));
 
 app.post('/api/pdf-to-image', async (req, res) => {
+    console.log('Request body:', req.body);
+    console.log('Request files:', req.files);
     if (!req.files || !req.files.pdf) {
         return res.status(400).json({ error: 'No PDF file uploaded' });
     }
