@@ -1,14 +1,16 @@
+console.log('Script.js loaded');
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOMContentLoaded fired');
     const toolCategories = document.getElementById('tool-categories');
     const functionList = document.getElementById('function-list');
     const functionsUl = document.getElementById('functions');
     const selectedTool = document.getElementById('selected-tool');
     const backButton = document.getElementById('back-to-tools');
 
-    console.log('Script loaded, fetching tools.json'); // Debug log
+    console.log('Script loaded, fetching tools.json');
     fetch('/tools.json')
         .then(response => {
-            console.log('Fetch response status:', response.status); // Debug log
+            console.log('Fetch response status:', response.status);
             if (!response.ok) {
                 throw new Error(`Failed to fetch tools.json: ${response.statusText}`);
             }
